@@ -1,1 +1,1 @@
-int execute();
+char ** execute();

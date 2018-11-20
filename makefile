@@ -1,5 +1,5 @@
-all : sea_shell.c shell.h
-	gcc -o shell sea_shell.c 
+all : jshell.c shell.h
+	gcc -o shell jshell.c 
 
 run : all
 	./shell
