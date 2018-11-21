@@ -9,28 +9,29 @@
 int main(){
 
     int status;
-    char ** cmd;
     char *buffer = calloc(1,1000);
-    while(1){
+    char ** cmd;
+    //while(1){
         printf("Enter command: ");
-        //fgets(buffer, 1000, stdin);
-        scanf("%s", buffer);
+        fgets(buffer, 1000, stdin);
+        //scanf("%s", buffer);
         
         printf("buffer = %s\n", buffer);
-        cmd = execute(buffer);
+        cmd = parse(buffer);
 
-        //for (char ** a = cmd; *a; a++){
-        //    printf("a = %s\n", *a); 
-        //}
+        for (char ** a = cmd; *a; a++){
+            printf("a = %s\n", *a); 
+        }
         execvp(cmd[0], cmd);
         //printf("\ncmd: %s\n", buffer);
         //cmd = wait(&status);
-    }
+    //}
     return 0;
 }
 
-char ** execute( char * line ){
-    char ** args = malloc(1000);
+char ** parse( char * line ){
+    //points to pointers
+    char ** args = calloc(50, 100);
     int i = 0;
     while (args[i++] = strsep(&line, " "));
     return args;
