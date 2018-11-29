@@ -1,8 +1,8 @@
-all : jshell.c shell.h
-	gcc -o shell jshell.c 
+all : cshell.c shell.h
+	gcc -o exec cshell.c 
 
 run : all
-	./shell
+	./exec
 
 clean : shell
-	rm shell
+	rm exec
