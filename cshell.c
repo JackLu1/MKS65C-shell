@@ -8,10 +8,13 @@
 
 int main(){
 
-    int status;
     char ** cmd;
+    char * cwd = malloc(100);
+    char * usr = getlogin();
     while(1){
-        printf("$ ");
+        cwd = getcwd(cwd, 100);
+        printf("[%s] [%s] $ ", usr, cwd);
+
         cmd = parse();
         shell_exe(cmd);
         exe( cmd );
@@ -19,11 +22,15 @@ int main(){
     return 0;
 }
 
+/*
+ * Responsible for receiving user input and parsing into an execvp array.
+ * Returns array of strings of command line arguments.
+ */
 char ** parse(){
 
-    char * buffer = calloc(1,10000);
-    char ** args = calloc(1, 10000);
-    fgets(buffer, 10000, stdin);
+    char * buffer = calloc(1,1000);
+    char ** args = calloc(1, 1000);
+    fgets(buffer, 1000, stdin);
 
     //remove terminating newline
     buffer[strcspn(buffer, "\n")] = 0;
@@ -34,6 +41,10 @@ char ** parse(){
     return args;
 }
 
+/*
+ * Arguments: array of commandline argument strings
+ * Checks if command is special shell commands, and executes it if true.
+ */
 void shell_exe( char ** cmd ){
     if (!strcmp(cmd[0], "exit")) {
         int status;
@@ -43,6 +54,10 @@ void shell_exe( char ** cmd ){
     }
 }
 
+/*
+ * Arguments: array of commandline argument strings
+ * Forks a child which executes command
+ */
 void exe( char ** cmd ){
     int f = fork();
     int status;
@@ -56,32 +71,6 @@ void exe( char ** cmd ){
         exit(status);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
