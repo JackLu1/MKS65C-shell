@@ -50,7 +50,14 @@ void exe( char ** cmd ){
         perror("status");
     } else {
         //child
-        redir(cmd);
+        cmd = redir(cmd);
+        int i = 0;
+        //while(cmd[i]){
+        //    if (strchr(cmd[i], '|')){
+        //        pipe_function( cmd );
+        //    }
+        //    i++;
+        //}
         execvp(cmd[0], cmd);
         exit(status);
     }

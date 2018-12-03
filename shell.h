@@ -4,10 +4,6 @@
  */
 char ** parse(char * buffer, char * delim);
 /*
- * Parses input for commands separated by ;
- */
-char ** parse_cmd(char * buffer);
-/*
  * Arguments: array of commandline argument strings
  * Checks if command is special shell commands, and executes it if true.
  */
@@ -25,4 +21,9 @@ char ** rm_space( char ** cmd );
  * Arguments: command line array
  * Handles Redirection
  */
-void redir( char ** cmd );
+char ** redir( char ** cmd );
+/*
+ * Arguments: command line array
+ * Handles piping
+ */
+void pipe_function( char ** cmd );
