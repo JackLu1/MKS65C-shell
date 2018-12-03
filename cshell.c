@@ -4,7 +4,9 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <ctype.h>
 #include "shell.h"
+#include <fcntl.h>
 
 /*
  * Runs infinite while loop until terminated
@@ -21,48 +23,18 @@ int main(){
         printf("[%s] [%s] $ ", usr, cwd);
         char * buffer = calloc(1,1000);
         fgets(buffer, 1000, stdin);
-    
+
         strcpy(delim, ";");
         cmd_list = parse(buffer, delim);
         strcpy(delim, " ");
         int i = 0;
         while( cmd_list[i] ) {
-            cmd = parse(cmd_list[i++], " ");
+            cmd = rm_space(parse(cmd_list[i++], " "));
             shell_exe(cmd);
             exe( cmd );
         }
     }
     return 0;
-}
-
-/*
- * Responsible for receiving user input and parsing into an execvp array.
- * Returns array of strings of command line arguments.
- */
-char ** parse( char * buffer, char * delim ){
-
-    char ** args = calloc(1, 1000);
-
-    //remove terminating newline
-    buffer[strcspn(buffer, "\n")] = 0;
-
-    int i = 0;
-    while (args[i++] = strsep(&buffer, delim));
-    free(buffer);
-    return args;
-}
-
-/*
- * Arguments: array of commandline argument strings
- * Checks if command is special shell commands, and executes it if true.
- */
-void shell_exe( char ** cmd ){
-    if (!strcmp(cmd[0], "exit")) {
-        int status;
-        exit(status);
-    } else if (!strcmp(cmd[0], "cd")) {
-        chdir(cmd[1]);
-    }
 }
 
 /*
@@ -78,9 +50,9 @@ void exe( char ** cmd ){
         perror("status");
     } else {
         //child
+        redir(cmd);
         execvp(cmd[0], cmd);
         exit(status);
     }
 }
-
 

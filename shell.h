@@ -17,3 +17,12 @@ void shell_exe( char ** cmd );
  * Forks a child which executes command
  */
 void exe( char ** cmd );
+/*
+ * Removes extra whitespace from each string in the command line array
+ */
+char ** rm_space( char ** cmd );
+/*
+ * Arguments: command line array
+ * Handles Redirection
+ */
+void redir( char ** cmd );
