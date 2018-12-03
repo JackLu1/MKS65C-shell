@@ -29,6 +29,7 @@ int main(){
         strcpy(delim, " ");
         int i = 0;
         while( cmd_list[i] ) {
+            int j = 0;
             cmd = rm_space(parse(cmd_list[i++], " "));
             shell_exe(cmd);
             exe( cmd );

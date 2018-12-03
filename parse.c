@@ -13,7 +13,7 @@
  */
 char ** parse( char * buffer, char * delim ){
 
-    char ** args = calloc(1, 1000);
+    char ** args = calloc(10, 1000);
 
     //remove terminating newline
     buffer[strcspn(buffer, "\n")] = 0;
@@ -46,7 +46,7 @@ char ** rm_space( char ** cmd ){
         }
         c++;
         int size = c - cmd[i];
-        char * temp = malloc(size * 4);
+        char * temp = calloc(size , 4);
         strncpy(temp, cmd[i], size);
         cmd[i] = temp;
         i++;
