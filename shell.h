@@ -26,4 +26,4 @@ char ** redir( char ** cmd );
  * Arguments: command line array
  * Handles piping
  */
-void pipe_function( char ** cmd );
+void pipe_function( char * cmd );

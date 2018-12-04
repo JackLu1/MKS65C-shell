@@ -62,53 +62,58 @@ char ** redir( char ** cmd ){
  * Arguments: command line array
  * Handles piping
  */
-void pipe_function( char ** cmd ){
-    //for (int i = 0; cmd[i]; i++){
-    //    printf("%s\n", cmd[i]);
-    //}
+void pipe_function( char * cmd ){
+    char * cmd0_temp = strsep(&cmd, "|");
+    char * cmd1_temp = strsep(&cmd, "|");
+    //printf("cmd0_temp: %s\n", cmd0_temp);
+    //printf("cmd1_temp: %s\n", cmd1_temp);
+
+    char ** cmd0 = rm_space(parse(cmd0_temp, " "));
+    char ** cmd1 = rm_space(parse(cmd1_temp, " "));
     int i = 0;
-    char * cmd0 = strsep(cmd, "|");
-    char * cmd1 = strsep(cmd, "|");
-    printf("cmd0 = %s\n", cmd0);
-    printf("cmd1 = %s\n", cmd1);
-    //while (cmd[i]){
-    //    if ( !strcmp(cmd[i], "|") ){
-    //        int a = 0;
-    //        for (; a < i; a++){
-    //            printf("READ: %s\n", cmd[a]);
-    //            cmd0[a] = cmd[a];
-    //        }
-    //        i++;
-    //        for (; cmd[i]; i++){
-    //            printf("WRITE: %s\n", cmd[i]);
-    //            cmd1[i] = cmd[i];
-    //        }
-    //        break;
-    //    }
-    //    i++;
+    //while (cmd0[i]){
+    //    printf("|%s|\n", cmd0[i++]);
     //}
+    //i = 0;
+    //while (cmd1[i]){
+    //    printf("|%s|\n", cmd1[i++]);
+    //}
+
     int pipefd[2];
+
     int fd0;
     int fd1;
-    int stdout_backup = dup(WRITE);
-    int stdin_backup = dup(READ);
+    int stdout_backup = dup(STDOUT_FILENO);
+    int stdin_backup = dup(STDIN_FILENO);
+
     pipe(pipefd);
     if ( !(fd0 = fork()) ){
         //WRITE
-        dup2(pipefd[1], 1);
-        printf("WRITE END %s", cmd0);
-        char ** cmd0arr = parse(cmd0, " ");
-        execvp(cmd0arr[0], cmd0arr);
+        printf("WRITE\n");
+
+        dup2(pipefd[1], STDOUT_FILENO);
+        //close unused read end
+        close(pipefd[0]);
+
+        execvp(cmd0[0], cmd0);
     } else if ( !(fd1 = fork()) ){
         //READ
-        dup2(pipefd[0], 0);
-        printf("READ END %s", cmd1);
-        char ** cmd1arr = parse(cmd1, " ");
-        execvp(cmd1arr[0], cmd1arr);
-    }
+        printf("READ\n");
 
+        dup2(pipefd[0], STDIN_FILENO);
+        //close unused write end
+        close(pipefd[1]);
+
+        execvp(cmd1[0], cmd1);
+    } 
+
+    int status;
     close(pipefd[0]);
     close(pipefd[1]);
+    waitpid( fd0, &status, 0 );
+    perror("status");
+    waitpid( fd1, &status, 0 );
+    perror("status");
     dup2(stdout_backup, 1);
     dup2(stdin_backup, 0);
     close(stdout_backup);
