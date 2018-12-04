@@ -6,12 +6,13 @@
     - Shell commands are 'cd' and 'exit'  
         - You can cd into home directory by using 'cd' or 'cd ~'
     - Redirections using < and >  
+    - Piping using |
 
-## Attempted:  
-    - Piping is not working  
+## Attempted
+    - Multiple redirects and pipes don't work
 
 
-get home dir, but cannot append another path to it
+get home dir, but cannot append another path to it~~
 for example
 $ cd ~/systems
 will not work
@@ -26,11 +27,13 @@ pipes should be separated by spaces on both sides, or else they won't work
 ```c
 /*
  * Responsible for receiving user input and parsing into an execvp array.
+ * Accepts string of commands and string delimiter
  * Returns array of strings of command line arguments.
  */
 char ** parse(char * buffer, char * delim);
 /*
  * Removes extra whitespace from each string in the command line array
+ * Takes in string arr of commands, returns modified array
  */
 char ** rm_space( char ** cmd );
 ```
@@ -45,6 +48,7 @@ void shell_exe( char ** cmd );
 /*
  * Arguments: command line array
  * Handles Redirection
+ * Returns string array of shell commands
  */
 char ** redir( char ** cmd );
 /*
