@@ -111,9 +111,7 @@ void pipe_function( char * cmd ){
     close(pipefd[0]);
     close(pipefd[1]);
     waitpid( fd0, &status, 0 );
-    perror("status");
     waitpid( fd1, &status, 0 );
-    perror("status");
     dup2(stdout_backup, 1);
     dup2(stdin_backup, 0);
     close(stdout_backup);

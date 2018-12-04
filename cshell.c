@@ -53,7 +53,6 @@ void exe( char ** cmd ){
     if (f){
         // parent
         wait(&status);
-        perror("status");
     } else {
         //child
         cmd = redir(cmd);
